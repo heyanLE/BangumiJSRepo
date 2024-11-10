@@ -25,18 +25,14 @@ var weekLabel = ["周一", "周二", "周三", "周四", "周五", "周六", "�
 
 function PageComponent_getMainTabs() {
     var res = new ArrayList();
-    res.add(new MainTab("首页", MainTab.MAIN_TAB_GROUP));
+    res.add(new MainTab("首页", MainTab.MAIN_TAB_WITH_COVER));
     res.add(new MainTab("排期", MainTab.MAIN_TAB_GROUP));
     return res;
 }
 
 function PageComponent_getSubTabs(mainTab) {
     var res = new ArrayList();
-    if (mainTab.label == "首页") {
-        res.add(new SubTab("首页", true));
-        res.add(new SubTab("TV番剧", true));
-        res.add(new SubTab("剧场电影", true));
-    } else if (mainTab.label == "排期") {
+    if (mainTab.label == "排期") {
         for (var i = 0 ; i < weekLabel.length ; i ++){
             res.add(new SubTab(weekLabel[i], true, i));
         }
@@ -47,9 +43,7 @@ function PageComponent_getSubTabs(mainTab) {
 function PageComponent_getContent(mainTab, subTab, key) {
     var doc = getMainHomeDocument();
     if (mainTab.label == "首页") {
-        if (subTab.label == "首页") {
-            return new Pair(null, coverHomeMainCartoonCover(doc));
-        }
+        return new Pair(null, coverHomeMainCartoonCover(doc));
     } else if (mainTab.label == "排期") {
         var timeLine = coverTimeLine(doc);
         if (timeLine.size() != 7) {
