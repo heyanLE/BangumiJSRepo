@@ -2,7 +2,7 @@
 // @label 稀饭动漫
 // @versionName 1.0
 // @versionCode 1
-// @libVersion 12
+// @libVersion 11
 // @cover https://dm.xifanacg.com/template/dsn2/static/img/fav.png
 
 // Inject
