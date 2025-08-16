@@ -32,7 +32,7 @@ async function main() {
                 for (const line of lines) {
                     console.log("Found line: " + line);
                     // @key heyanle.ggl
-                    if (!line.startsWith("//")) continue;
+                    if (!line.startsWith("//")) break;
                     const trimmedLine = line.trim().substring(2).trim();
                     if (!trimmedLine.startsWith("@")) continue;
                     const parts = trimmedLine.split(" ");
