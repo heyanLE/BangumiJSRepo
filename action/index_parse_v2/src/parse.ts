@@ -45,7 +45,7 @@ async function main() {
             }
 
             let key = map.get("key");
-            let url = repoUrl + "/" + file;
+            let url = repoUrl + "/" + key + ".js";
             let label = map.get("label") || "Unknown";
             let versionCode = parseInt(map.get("versionCode") || "0");
             let versionName = map.get("versionName") || "0.0.0";
