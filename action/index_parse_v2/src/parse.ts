@@ -4,8 +4,8 @@ import * as fs from 'fs';
 const repoUrl = "https://github.com/heyanLE/BangumiJSRepo/blob/publish/repository/v2"
 
 const folder = "../../";
-const indexFolder = "../../repository/v2/";
-const indexFile = "../../repository/v2/index.json";
+const indexFolder = "../../../repository/v2/";
+const indexFile = "../../../repository/v2/index.json";
 
 type ExtensionRemote = {
     key: string;
