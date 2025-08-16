@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 
-const repoUrl = "https://github.com/heyanLE/BangumiJSRepo/blob/public/repository/v2"
+const repoUrl = "https://raw.githubusercontent.com/heyanLE/BangumiJSRepo/refs/heads/public/repository/v2"
 
 const folder = "../..";
 const repositoryFolder = "../../repository/";
