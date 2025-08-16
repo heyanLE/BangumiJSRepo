@@ -2,7 +2,7 @@
 // @label GiriGiriLove
 // @versionName 1.0
 // @versionCode 2
-// @libVersion 11
+// @libVersion 12
 // @cover https://anime.girigirilove.com/upload/site/20231121-1/fdd2694db66628a9deadd86e50aedd43.png
 
 // Inject
