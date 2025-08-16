@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 
-const repoUrl = "https://github.com/heyanLE/BangumiJSRepo/blob/main/repository/v2"
+const repoUrl = "https://github.com/heyanLE/BangumiJSRepo/blob/public/repository/v2"
 
 const folder = "../..";
 const repositoryFolder = "../../repository/";
@@ -62,6 +62,8 @@ async function main() {
                 versionCode: versionCode,
                 versionName: versionName
             };
+            const targetFile = indexFolder + "/" + key + ".js";
+            await copyFile(folder + "/" + file, targetFile);
             extensions.push(remote);
         }
     }
@@ -114,6 +116,18 @@ function read(file: string): Promise<Buffer | NodeJS.ErrnoException | null> {
             resolve(data)
         
         })
+    });
+}
+
+function copyFile(source: string, destination: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        fs.copyFile(source, destination, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
     });
 }
 
