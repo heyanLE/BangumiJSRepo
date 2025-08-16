@@ -1,0 +1,110 @@
+import * as fs from 'fs';
+
+
+const repoUrl = "https://github.com/heyanLE/BangumiJSRepo/blob/publish/repository/v2"
+
+const folder = "../../";
+const indexFolder = "../../repository/v2/";
+const indexFile = "../../repository/v2/index.json";
+
+type ExtensionRemote = {
+    key: string;
+    url: string;
+    label: string;
+    versionCode: number;
+    versionName: string;
+}
+
+async function main() {
+    await mkdirs(indexFolder);
+    const files = await lists(folder);
+    let extensions: ExtensionRemote[] = [];
+    for (const file of files) {
+        if (file.endsWith(".js")) {
+            const content = await read(file);
+            let map = new Map<string, string>();
+            if (content) {
+                const lines = content.toString().split("\n");
+                for (const line of lines) {
+                     // @key heyanle.ggl
+                    if (!line.startsWith("//")) continue; 
+                    const trimmedLine = line.trim().substring(2).trim();
+                    if (!trimmedLine.startsWith("@")) continue;
+                    const parts = trimmedLine.split(" ");
+                    if (parts.length < 2) continue;
+                    const key = parts[0].substring(1); // Remove '@'
+                    const value = parts.slice(1).join(" "); // Join the rest as value
+                    map.set(key, value);
+                }
+            }
+
+            let key = map.get("key");
+            let url = repoUrl + "/" + file;
+            let label = map.get("label") || "Unknown";
+            let versionCode = parseInt(map.get("versionCode") || "0");
+            let versionName = map.get("versionName") || "0.0.0";
+
+            if (!key) {
+                console.log("No key found in " + file);
+                continue;
+            }
+
+            const remote: ExtensionRemote = {
+                key: key,
+                url: url,
+                label: label,
+                versionCode: versionCode,
+                versionName: versionName
+            };
+            extensions.push(remote);
+        }
+    }
+
+    await deleteFile(indexFile);
+    await writeToFile(indexFile, JSON.stringify(extensions));
+}
+
+function lists(path: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        fs.readdir(path, (err, files) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(files);
+            }
+        });
+    });
+}
+
+function mkdirs(path: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        fs.mkdir(path, () => {
+            resolve();
+        })
+    });
+}
+
+function deleteFile(file: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        fs.rm(file, () => {
+            resolve()
+        })
+    });
+}
+
+function writeToFile(file: string, data: Buffer|string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(file, data, () => {
+            resolve(file);
+        })
+    });
+}
+
+function read(file: string): Promise<Buffer | NodeJS.ErrnoException | null> {
+    return new Promise((resolve, reject) => {
+        fs.readFile(file, (err, data) => {
+            resolve(data)
+        })
+    });
+}
+
