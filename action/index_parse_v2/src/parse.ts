@@ -4,6 +4,7 @@ import * as fs from 'fs';
 const repoUrl = "https://github.com/heyanLE/BangumiJSRepo/blob/publish/repository/v2"
 
 const folder = "../..";
+const repositoryFolder = "../../repository/";
 const indexFolder = "../../repository/v2/";
 const indexFile = "../../repository/v2/index.jsonl";
 
@@ -16,6 +17,7 @@ type ExtensionRemote = {
 }
 
 async function main() {
+    await mkdirs(repositoryFolder);
     await mkdirs(indexFolder);
     const files = await lists(folder);
     let extensions: ExtensionRemote[] = [];
@@ -24,7 +26,6 @@ async function main() {
         console.log("Processing " + file);
         if (file.endsWith(".js")) {
             const content = await read(folder + "/" + file);
-            console.log("Read content of " + content);
             let map = new Map<string, string>();
             if (content) {
                 const lines = content.toString().split("\n");
@@ -67,6 +68,7 @@ async function main() {
 
     await deleteFile(indexFile);
     const indexContent = extensions.map(ext => JSON.stringify(ext)).join("\n");
+    console.log("indexContent: " + indexContent);
     await writeToFile(indexFile, indexContent);
 }
 
@@ -109,8 +111,8 @@ function writeToFile(file: string, data: Buffer|string): Promise<string> {
 function read(file: string): Promise<Buffer | NodeJS.ErrnoException | null> {
     return new Promise((resolve, reject) => {
         fs.readFile(file, (err, data) => {
-            console.log("Read content of " + data);
             resolve(data)
+        
         })
     });
 }
