@@ -1,4 +1,4 @@
-# EasyBangumi-sources
+# EasyBangumi-JSRepo
 
 纯纯看番社区 JS 源仓库。
 
