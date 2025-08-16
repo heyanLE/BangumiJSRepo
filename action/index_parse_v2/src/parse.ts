@@ -3,9 +3,9 @@ import * as fs from 'fs';
 
 const repoUrl = "https://github.com/heyanLE/BangumiJSRepo/blob/publish/repository/v2"
 
-const folder = "../../";
-const indexFolder = "../../../repository/v2/";
-const indexFile = "../../../repository/v2/index.json";
+const folder = "../..";
+const indexFolder = "../../repository/v2/";
+const indexFile = "../../repository/v2/index.jsonl";
 
 type ExtensionRemote = {
     key: string;
@@ -19,18 +19,23 @@ async function main() {
     await mkdirs(indexFolder);
     const files = await lists(folder);
     let extensions: ExtensionRemote[] = [];
+    console.log("Found " + files.length + " files in " + folder);
     for (const file of files) {
+        console.log("Processing " + file);
         if (file.endsWith(".js")) {
-            const content = await read(file);
+            const content = await read(folder + "/" + file);
+            console.log("Read content of " + content);
             let map = new Map<string, string>();
             if (content) {
                 const lines = content.toString().split("\n");
                 for (const line of lines) {
-                     // @key heyanle.ggl
-                    if (!line.startsWith("//")) continue; 
+                    console.log("Found line: " + line);
+                    // @key heyanle.ggl
+                    if (!line.startsWith("//")) continue;
                     const trimmedLine = line.trim().substring(2).trim();
                     if (!trimmedLine.startsWith("@")) continue;
                     const parts = trimmedLine.split(" ");
+                    console.log("Found parts: " + parts);
                     if (parts.length < 2) continue;
                     const key = parts[0].substring(1); // Remove '@'
                     const value = parts.slice(1).join(" "); // Join the rest as value
@@ -61,7 +66,8 @@ async function main() {
     }
 
     await deleteFile(indexFile);
-    await writeToFile(indexFile, JSON.stringify(extensions));
+    const indexContent = extensions.map(ext => JSON.stringify(ext)).join("\n");
+    await writeToFile(indexFile, indexContent);
 }
 
 function lists(path: string): Promise<string[]> {
@@ -103,8 +109,10 @@ function writeToFile(file: string, data: Buffer|string): Promise<string> {
 function read(file: string): Promise<Buffer | NodeJS.ErrnoException | null> {
     return new Promise((resolve, reject) => {
         fs.readFile(file, (err, data) => {
+            console.log("Read content of " + data);
             resolve(data)
         })
     });
 }
 
+main();
